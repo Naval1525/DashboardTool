@@ -27,7 +27,7 @@ A modern, responsive analytics dashboard built with Next.js, TypeScript, and Apa
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/analytics-dashboard.git
+git clone https://github.com/Naval1525/analytics-dashboard.git
 cd analytics-dashboard
 ```
 
