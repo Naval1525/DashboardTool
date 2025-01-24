@@ -1,41 +1,52 @@
-import { BarChart, LineChart, PieChart, RadarChart, ScatterChart } from '@/components/Charts';
+'use client';
 
-export default function Home() {
+import { RiskOverview, ServicesChart, VulnerabilityAssessment } from '../components/Charts';
+import { Shield, AlertTriangle, Activity } from 'lucide-react';
+
+export default function Page() {
   return (
-    <main className="min-h-screen bg-black text-white p-8">
+    <main className="min-h-screen bg-gradient-to-b from-gray-950 to-gray-900 p-8">
       <div className="max-w-7xl mx-auto space-y-8">
-        <h1 className="text-3xl font-bold text-white">Analytics Dashboard</h1>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="bg-gray-900 rounded-xl border border-gray-800 p-6">
-            <h2 className="text-xl font-semibold mb-4 text-gray-100">Bar Chart</h2>
-            <p className="text-gray-400 mb-4">Comparing quarterly performance between years using grouped bars</p>
-            <BarChart />
+        <div className="bg-gray-900/50 backdrop-blur-sm rounded-xl p-8 border border-gray-800">
+          <div className="flex items-center gap-4 mb-6">
+            <div className="h-12 w-12 bg-blue-500/10 rounded-lg flex items-center justify-center">
+              <Shield className="h-6 w-6 text-blue-500" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold text-white">Security Dashboard</h1>
+              <p className="text-gray-400">Real-time security metrics and analysis</p>
+            </div>
           </div>
 
-          <div className="bg-gray-900 rounded-xl border border-gray-800 p-6">
-            <h2 className="text-xl font-semibold mb-4 text-gray-100">Line Chart</h2>
-            <p className="text-gray-400 mb-4">Tracking revenue and profit trends over time with smooth curves</p>
-            <LineChart />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-8">
+            <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-700">
+              <div className="flex items-center gap-3">
+                <Activity className="h-5 w-5 text-yellow-500" />
+                <span className="text-gray-300">Current Risk Level</span>
+              </div>
+              <p className="text-2xl font-bold text-white mt-2">Medium (49/100)</p>
+            </div>
+            <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-700">
+              <div className="flex items-center gap-3">
+                <AlertTriangle className="h-5 w-5 text-blue-500" />
+                <span className="text-gray-300">Active Alerts</span>
+              </div>
+              <p className="text-2xl font-bold text-white mt-2">0 Services Exposed</p>
+            </div>
+            <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-700">
+              <div className="flex items-center gap-3">
+                <Shield className="h-5 w-5 text-green-500" />
+                <span className="text-gray-300">Security Coverage</span>
+              </div>
+              <p className="text-2xl font-bold text-white mt-2">10% Protected</p>
+            </div>
           </div>
+        </div>
 
-          <div className="bg-gray-900 rounded-xl border border-gray-800 p-6">
-            <h2 className="text-xl font-semibold mb-4 text-gray-100">Pie Chart</h2>
-            <p className="text-gray-400 mb-4">Distribution of sales across different channels with percentage breakdown</p>
-            <PieChart />
-          </div>
-
-          <div className="bg-gray-900 rounded-xl border border-gray-800 p-6">
-            <h2 className="text-xl font-semibold mb-4 text-gray-100">Radar Chart</h2>
-            <p className="text-gray-400 mb-4">Multi-dimensional comparison of budget allocation vs actual spending</p>
-            <RadarChart />
-          </div>
-
-          <div className="bg-gray-900 rounded-xl border border-gray-800 p-6 lg:col-span-2">
-            <h2 className="text-xl font-semibold mb-4 text-gray-100">Scatter Chart</h2>
-            <p className="text-gray-400 mb-4">Correlation between revenue and profit with dynamic point sizing</p>
-            <ScatterChart />
-          </div>
+        <div className="space-y-8">
+          <RiskOverview />
+          <ServicesChart />
+          <VulnerabilityAssessment />
         </div>
       </div>
     </main>
