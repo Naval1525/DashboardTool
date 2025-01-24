@@ -1,230 +1,182 @@
 'use client';
-
 import React, { useEffect, useRef } from 'react';
 import * as echarts from 'echarts';
+import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
 import type { EChartsOption } from 'echarts';
 
-// Custom hook for chart initialization
 const useChart = (options: EChartsOption) => {
   const chartRef = useRef<HTMLDivElement>(null);
   const chartInstance = useRef<echarts.ECharts>();
 
   useEffect(() => {
     if (!chartRef.current) return;
-    chartInstance.current = echarts.init(chartRef.current, 'dark');
-    chartInstance.current.setOption(options);
-    const handleResize = () => chartInstance.current?.resize();
-    window.addEventListener('resize', handleResize);
-    return () => {
-      chartInstance.current?.dispose();
-      window.removeEventListener('resize', handleResize);
-    };
+    try {
+      chartInstance.current = echarts.init(chartRef.current);
+      chartInstance.current.setOption(options);
+      const handleResize = () => chartInstance.current?.resize();
+      window.addEventListener('resize', handleResize);
+      return () => {
+        chartInstance.current?.dispose();
+        window.removeEventListener('resize', handleResize);
+      };
+    } catch (error) {
+      console.error('Error initializing chart:', error);
+    }
   }, [options]);
 
   return chartRef;
 };
 
-export const BarChart: React.FC = () => {
-  const options: EChartsOption = {
-    backgroundColor: '#1a1a1a',
-    tooltip: { trigger: 'axis' },
-    grid: { containLabel: true },
-    legend: {
-      data: ['2023', '2024'],
-      textStyle: { color: '#fff' }
-    },
-    xAxis: {
-      type: 'category',
-      data: ['Q1', 'Q2', 'Q3', 'Q4'],
-      axisLabel: { rotate: 45, color: '#fff' }
-    },
-    yAxis: {
-      type: 'value',
-      axisLabel: { color: '#fff' }
-    },
-    series: [
-      {
-        name: '2023',
-        type: 'bar',
-        data: [120, 200, 150, 180],
-        itemStyle: { color: '#FF6B6B' }
-      },
-      {
-        name: '2024',
-        type: 'bar',
-        data: [140, 230, 170, 210],
-        itemStyle: { color: '#4ECDC4' }
-      }
-    ]
-  };
+const servicesData = [
+  { date: '12-26', services: 1, ips: 1 },
+  { date: '12-28', services: 1, ips: 1 },
+  { date: '12-30', services: 1, ips: 1 },
+  { date: '01-01', services: 0, ips: 0 },
+  { date: '01-03', services: 0, ips: 0 },
+  { date: '01-05', services: 0, ips: 0 }
+];
 
-  const chartRef = useChart(options);
-  return <div ref={chartRef} className="w-full h-64 md:h-96" />;
+const assessmentData = [
+  { name: 'Endpoint Sensor', count: 16, percentage: 7.7 },
+  { name: 'Trend Cloud One - Endpoint & Workload Security', count: 6, percentage: 2.9 },
+  { name: 'Standard Endpoint Protection', count: 7, percentage: 3.3 },
+  { name: 'Server & Workload Protection', count: 3, percentage: 1.4 },
+  { name: 'Third party device data', count: 0, percentage: 0 }
+];
+
+export const RiskOverview = () => {
+  const data = Array.from({ length: 180 }, (_, i) => ({
+    date: new Date(2024, 7 + Math.floor(i / 30), i % 30).toISOString(),
+    value: 40 + Math.random() * 20
+  }));
+
+  return (
+    <div className="bg-gradient-to-br from-gray-900 to-gray-800 text-white p-8 rounded-xl shadow-xl">
+      <div className="flex items-center gap-6 mb-8">
+        <div className="bg-gray-800/50 p-4 rounded-lg">
+          <h2 className="text-3xl font-bold text-yellow-400">49</h2>
+          <p className="text-sm text-yellow-400/80">Medium risk</p>
+        </div>
+        <div className="text-3xl text-gray-400 font-light">/100</div>
+      </div>
+
+      <div className="mb-8">
+        <button className="bg-gray-800/80 px-6 py-2 rounded-lg text-sm hover:bg-gray-700/80 transition-colors">
+          Cyber Risk Subindexes
+        </button>
+      </div>
+
+      <div className="space-y-3 mb-8">
+        {[
+          { color: 'bg-purple-400', label: 'Exposure', value: 'Medium' },
+          { color: 'bg-blue-400', label: 'Attack', value: 'Medium' },
+          { color: 'bg-pink-400', label: 'Security Configuration', value: 'Medium' }
+        ].map((item, index) => (
+          <div key={index} className="flex items-center gap-3 bg-gray-800/30 p-3 rounded-lg">
+            <div className={`w-3 h-3 rounded-full ${item.color}`}></div>
+            <span className="text-gray-300">{item.label}: </span>
+            <span className="text-yellow-400 font-medium">{item.value}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className="h-64">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={data}>
+            <XAxis dataKey="date" tick={false} axisLine={{ stroke: '#4B5563' }} />
+            <YAxis domain={[0, 100]} axisLine={{ stroke: '#4B5563' }} tick={{ fill: '#9CA3AF' }} />
+            <Line type="monotone" dataKey="value" stroke="#F3F4F6" dot={false} strokeWidth={2} />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  );
 };
 
-export const LineChart: React.FC = () => {
-  const options: EChartsOption = {
-    backgroundColor: '#1a1a1a',
-    tooltip: { trigger: 'axis' },
-    legend: {
-      data: ['Revenue', 'Profit'],
-      textStyle: { color: '#fff' }
-    },
-    xAxis: {
-      type: 'category',
-      data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-      axisLabel: { color: '#fff' }
-    },
-    yAxis: {
-      type: 'value',
-      axisLabel: { color: '#fff' }
-    },
-    series: [
-      {
-        name: 'Revenue',
-        type: 'line',
-        data: [820, 932, 901, 934, 1290, 1330],
-        smooth: true,
-        itemStyle: { color: '#FF0099' }
-      },
-      {
-        name: 'Profit',
-        type: 'line',
-        data: [320, 432, 501, 634, 890, 930],
-        smooth: true,
-        itemStyle: { color: '#00F5D4' }
-      }
-    ]
-  };
+export const ServicesChart = () => (
+  <div className="bg-gradient-to-br from-gray-900 to-gray-800 text-white p-8 rounded-xl shadow-xl">
+    <div className="flex items-center justify-between mb-8">
+      <h2 className="text-lg font-medium text-gray-200">UNEXPECTED INTERNET-FACING SERVICES/PORTS</h2>
+      <button className="px-6 py-2 text-sm bg-gray-800/80 rounded-lg hover:bg-gray-700/80 transition-colors">View Details</button>
+    </div>
 
-  const chartRef = useChart(options);
-  return <div ref={chartRef} className="w-full h-64 md:h-96" />;
-};
+    <div className="grid grid-cols-2 gap-8 mb-8">
+      <div className="bg-gray-800/30 p-4 rounded-lg">
+        <div className="text-4xl font-light mb-2">0</div>
+        <div className="text-sm text-gray-400">Unique unexpected services/ports</div>
+      </div>
+      <div className="bg-gray-800/30 p-4 rounded-lg">
+        <div className="text-4xl font-light mb-2">0</div>
+        <div className="text-sm text-gray-400">Total public IPs affected</div>
+      </div>
+    </div>
 
-export const PieChart: React.FC = () => {
-  const options: EChartsOption = {
-    backgroundColor: '#1a1a1a',
-    tooltip: {
-      trigger: 'item',
-      formatter: '{b}: {c} ({d}%)'
-    },
-    legend: {
-      orient: 'vertical',
-      left: 'left',
-      textStyle: { color: '#fff' }
-    },
-    series: [
-      {
-        name: 'Sales Distribution',
-        type: 'pie',
-        radius: '70%',
-        data: [
-          { value: 1048, name: 'Online', itemStyle: { color: '#FF0099' } },
-          { value: 735, name: 'Retail', itemStyle: { color: '#FF6B6B' } },
-          { value: 580, name: 'Partners', itemStyle: { color: '#FF9F43' } },
-          { value: 484, name: 'Others', itemStyle: { color: '#00F5D4' } }
-        ],
-        emphasis: {
-          itemStyle: {
-            shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowColor: 'rgba(0, 0, 0, 0.5)'
-          }
-        }
-      }
-    ]
-  };
+    <div className="h-64">
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart data={servicesData}>
+          <XAxis dataKey="date" stroke="#4B5563" tick={{ fill: '#9CA3AF', fontSize: 12 }} />
+          <YAxis domain={[0, 1.2]} ticks={[0, 0.4, 0.8, 1.2]} stroke="#4B5563" tick={{ fill: '#9CA3AF', fontSize: 12 }} />
+          <Tooltip contentStyle={{ backgroundColor: '#1F2937', border: 'none', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }} itemStyle={{ color: '#F3F4F6' }} />
+          <Line type="linear" dataKey="services" stroke="#F3F4F6" dot={{ fill: '#F3F4F6', r: 4 }} />
+          <Line type="linear" dataKey="ips" stroke="#60A5FA" dot={{ fill: '#60A5FA', r: 4 }} />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
+  </div>
+);
 
-  const chartRef = useChart(options);
-  return <div ref={chartRef} className="w-full h-64 md:h-96" />;
-};
+export const VulnerabilityAssessment = () => (
+  <div className="bg-gradient-to-br from-gray-900 to-gray-800 text-white p-8 rounded-xl shadow-xl">
+    <div className="flex justify-between items-start mb-8">
+      <h2 className="text-lg font-medium text-gray-200">VULNERABILITY ASSESSMENT COVERAGE (WINDOWS AND LINUX ENDPOINTS)</h2>
+    </div>
 
-export const RadarChart: React.FC = () => {
-  const options: EChartsOption = {
-    backgroundColor: '#1a1a1a',
-    tooltip: {},
-    legend: {
-      data: ['Allocated', 'Actual'],
-      textStyle: { color: '#fff' }
-    },
-    radar: {
-      indicator: [
-        { name: 'Sales', max: 100 },
-        { name: 'Marketing', max: 100 },
-        { name: 'Development', max: 100 },
-        { name: 'Support', max: 100 },
-        { name: 'Operations', max: 100 }
-      ],
-      axisName: { color: '#fff' },
-      splitArea: { show: false },
-      splitLine: { lineStyle: { color: '#333' } }
-    },
-    series: [{
-      type: 'radar',
-      data: [
-        {
-          value: [80, 70, 90, 85, 75],
-          name: 'Allocated',
-          itemStyle: { color: '#FF9F43' },
-          areaStyle: { opacity: 0.3 }
-        },
-        {
-          value: [85, 65, 88, 90, 70],
-          name: 'Actual',
-          itemStyle: { color: '#00F5D4' },
-          areaStyle: { opacity: 0.3 }
-        }
-      ]
-    }]
-  };
+    <div className="text-sm text-gray-400 mb-6">Last assessment: 2025-01-09</div>
 
-  const chartRef = useChart(options);
-  return <div ref={chartRef} className="w-full h-64 md:h-96" />;
-};
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="space-y-4">
+        <div className="mb-4">
+          <div className="flex items-center gap-2 text-blue-400 mb-4">
+            <span className="font-medium">Assessment visibility (21)</span>
+            <span className="text-xs bg-gray-800/50 px-2 py-1 rounded-full">ⓘ</span>
+          </div>
+          {assessmentData.map((item, index) => (
+            <div key={index} className="flex justify-between items-center mb-3 text-sm bg-gray-800/30 p-3 rounded-lg">
+              <span className="text-gray-300">{item.name}</span>
+              <div className="flex gap-8">
+                <span className="text-gray-200">{item.count}</span>
+                <span className="w-12 text-right text-blue-400">{item.percentage}%</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
 
-export const ScatterChart: React.FC = () => {
-  const options: EChartsOption = {
-    backgroundColor: '#1a1a1a',
-    tooltip: {
-      trigger: 'item',
-      formatter: function(params: any) {
-        return `Revenue: ${params.data[0]}<br/>Profit: ${params.data[1]}`;
-      }
-    },
-    xAxis: {
-      type: 'value',
-      name: 'Revenue (K)',
-      nameLocation: 'middle',
-      nameGap: 30,
-      nameTextStyle: { color: '#fff' },
-      axisLabel: { color: '#fff' }
-    },
-    yAxis: {
-      type: 'value',
-      name: 'Profit (K)',
-      nameLocation: 'middle',
-      nameGap: 30,
-      nameTextStyle: { color: '#fff' },
-      axisLabel: { color: '#fff' }
-    },
-    series: [{
-      type: 'scatter',
-      data: [
-        [28, 8], [55, 12], [43, 15], [91, 28],
-        [81, 25], [53, 17], [19, 5], [87, 29]
-      ],
-      symbolSize: function (data: any) {
-        return Math.sqrt(data[0]) * 1.5;
-      },
-      itemStyle: {
-        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-          { offset: 0, color: '#FF0099' },
-          { offset: 1, color: '#00F5D4' }
-        ])
-      }
-    }]
-  };
-
-  const chartRef = useChart(options);
-  return <div ref={chartRef} className="w-full h-64 md:h-96" />;
-};
+      <div className="flex flex-col items-center justify-center">
+        <div className="relative w-48 h-48">
+          <svg className="w-full h-full transform -rotate-90">
+            <circle cx="96" cy="96" r="88" stroke="#1F2937" strokeWidth="16" fill="none" />
+            <circle
+              cx="96"
+              cy="96"
+              r="88"
+              stroke="#60A5FA"
+              strokeWidth="16"
+              fill="none"
+              strokeDasharray={`${0.1 * 2 * Math.PI * 88} ${2 * Math.PI * 88}`}
+              className="transition-all duration-1000 ease-out"
+            />
+          </svg>
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center bg-gray-800/30 rounded-full">
+            <div className="text-4xl text-yellow-400 font-bold mb-1">10%</div>
+            <div className="text-sm text-gray-400 mb-2">21 / 209</div>
+            <div className="flex items-center gap-2 text-sm bg-yellow-400/10 px-3 py-1 rounded-full">
+              <span className="text-yellow-400">⚠</span>
+              <span className="text-yellow-400">Low coverage</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
