@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Advanced Analytics Dashboard
 
-## Getting Started
+A modern, responsive analytics dashboard built with Next.js, TypeScript, and Apache ECharts, featuring multiple chart types and dark theme.
 
-First, run the development server:
+## 🚀 Features
 
+- **5 Chart Types**
+  - Bar Chart: Comparative analysis
+  - Line Chart: Trend tracking
+  - Pie Chart: Distribution analysis
+  - Radar Chart: Multi-dimensional comparison
+  - Scatter Chart: Correlation visualization
+
+- **Dark Theme & Responsive Design**
+- **Interactive Elements**
+- **TypeScript Support**
+- **Performance Optimized**
+
+## 🛠 Tech Stack
+
+- Next.js 14
+- TypeScript
+- Apache ECharts
+- Tailwind CSS
+
+## 🏃‍♂️ Getting Started
+
+1. **Clone the repository**
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/yourusername/analytics-dashboard.git
+cd analytics-dashboard
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. **Install dependencies**
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. **Run development server**
+```bash
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. **Build for production**
+```bash
+npm run build
+```
 
-## Learn More
+## 📁 Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+├── src/
+│   ├── components/     # React components
+│   ├── app/           # Next.js pages
+│   └── styles/        # Global styles
+├── public/            # Static assets
+└── package.json       # Dependencies
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🎨 Customization
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Colors**: Modify chart colors in `components/Charts.tsx`
+2. **Layout**: Adjust grid layout in `app/page.tsx`
+3. **Data**: Update chart data in respective component files
 
-## Deploy on Vercel
+## 🤝 Contributing
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📝 License
+
+MIT License
+
+## 🙏 Acknowledgments
+
+- Apache ECharts team
+- Next.js team
+- Tailwind CSS team
